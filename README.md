@@ -17,7 +17,7 @@ Technik: Next.js 16, Postgres über [Neon](https://neon.tech) und Deployment auf
 Jede Challenge hat ein Overlay für den Stream. Es zeigt den Gesamt-Timer, den Fortschritt und alle Spiele. Das aktuelle Spiel wird hervorgehoben, und ein neuer Sieg blinkt kurz auf.
 
 1. Auf der Challenge-Karte auf das **Bildschirm-Symbol** klicken.
-2. Zwischen **Komplett** (420 × 640) und **Kompakt** (560 × 110) wählen und den Link kopieren.
+2. Zwischen **Komplett** (390 × 720) und **Kompakt** (570 × 110) wählen und den Link kopieren.
 3. In OBS: **Quelle hinzufügen → Browser**, den Link einfügen und die Größe übernehmen.
 
 Der Hintergrund ist durchsichtig, das Panel halbtransparent. Die Akzentfarbe kommt aus dem Link (`accent=blue`, `green`, `violet`, `orange`, `pink`, `cyan` oder `graphite`). Der Link enthält einen Nur-Lese-Schlüssel und funktioniert ohne Login. Damit kann man den Stand nur ansehen, nicht ändern. Den Link trotzdem nicht öffentlich posten.

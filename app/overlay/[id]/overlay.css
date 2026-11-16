@@ -33,16 +33,16 @@ html:has(.ov-root) body {
 
 /* ---------- Voll ---------- */
 
-.ov-full { padding: 18px 18px 14px; display: grid; gap: 12px; }
+.ov-full { width: 100%; max-width: 360px; padding: 18px 16px 14px; display: grid; gap: 12px; }
 
 .ov-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.ov-title { font-size: 18px; font-weight: 750; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ov-title { font-size: 20px; font-weight: 750; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ov-count { font-size: 22px; font-weight: 800; color: var(--ov-accent); }
 .ov-count small { font-size: 15px; color: var(--ov-muted); font-weight: 700; }
 
 .ov-timer { display: flex; align-items: center; gap: 10px; }
 .ov-time { font-size: 22px; font-weight: 750; letter-spacing: -0.01em; }
-.ov-timer-big .ov-time { font-size: 44px; line-height: 1; letter-spacing: -0.02em; }
+.ov-timer-big .ov-time { font-size: 48px; line-height: 1; letter-spacing: -0.02em; }
 .ov-state {
   display: inline-flex;
   align-items: center;
@@ -82,34 +82,34 @@ html:has(.ov-root) body {
   animation: ov-pop 0.6s cubic-bezier(0.2, 1.4, 0.4, 1);
 }
 
-.ov-games { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.ov-games { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
 .ov-game {
   display: grid;
-  grid-template-columns: 24px 1fr auto;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
-  padding: 6px 8px;
-  border-radius: 10px;
-  font-size: 15px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-size: 19px;
   transition: background-color 0.3s, opacity 0.3s;
 }
 .ov-idx {
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 800;
   background: rgba(255, 255, 255, 0.1);
   color: var(--ov-muted);
   text-shadow: none;
 }
-.ov-name { font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ov-prog { font-weight: 750; }
+.ov-name { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ov-prog { font-weight: 800; font-size: 20px; }
 
-.ov-dots { display: flex; gap: 4px; }
-.ov-dots > span { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid rgba(255, 255, 255, 0.4); }
+.ov-dots { display: flex; gap: 5px; }
+.ov-dots > span { width: 13px; height: 13px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.4); }
 .ov-dots > span.on { background: var(--ov-accent); border-color: var(--ov-accent); box-shadow: 0 0 6px var(--ov-accent); }
 
 .ov-game.is-done { opacity: 0.55; }
@@ -125,7 +125,7 @@ html:has(.ov-root) body {
 
 /* ---------- Kompakt ---------- */
 
-.ov-compact { display: flex; align-items: center; gap: 18px; padding: 12px 18px; }
+.ov-compact { max-width: 540px; display: flex; align-items: center; gap: 18px; padding: 12px 18px; }
 .ov-compact-main { flex: 1; min-width: 0; display: grid; gap: 6px; }
 .ov-compact-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
 .ov-compact .ov-title { font-size: 16px; }
