@@ -12,7 +12,21 @@ Kleine, passwortgeschützte Web-App für Gaming-Challenges. Eine Challenge beste
 
 Technik: Next.js 16, Postgres über [Neon](https://neon.tech) und Deployment auf Vercel.
 
-## Auf Vercel veröffentlichen
+## OBS-Overlay
+
+Jede Challenge hat ein Overlay für den Stream. Es zeigt den Gesamt-Timer, den Fortschritt und alle Spiele. Das aktuelle Spiel wird hervorgehoben, und ein neuer Sieg blinkt kurz auf.
+
+1. Auf der Challenge-Karte auf das **Bildschirm-Symbol** klicken.
+2. Zwischen **Komplett** (420 × 640) und **Kompakt** (560 × 110) wählen und den Link kopieren.
+3. In OBS: **Quelle hinzufügen → Browser**, den Link einfügen und die Größe übernehmen.
+
+Der Hintergrund ist durchsichtig, das Panel halbtransparent. Die Akzentfarbe kommt aus dem Link (). Der Link enthält einen Nur-Lese-Schlüssel und funktioniert ohne Login. Damit kann man den Stand nur ansehen, nicht ändern. Den Link trotzdem nicht öffentlich posten.
+
+## Deployment
+
+Das Repo ist mit Vercel verbunden: **Jeder Push auf  wird automatisch veröffentlicht.**
+
+## Auf Vercel neu einrichten
 
 1. Repo auf GitHub pushen.
 2. Auf [vercel.com/new](https://vercel.com/new) das Repo importieren. Framework „Next.js“ wird automatisch erkannt.
@@ -46,4 +60,6 @@ Ohne `DATABASE_URL` werden die Daten lokal in `.data/win-challenges.json` gespei
 | `app/api/` | API für Challenges, Login und Logout |
 | `lib/challenge.ts` | Logik: Spiele, Siege, Serien, Gesamt-Timer, Abschluss |
 | `lib/store.ts` | Speicher: Postgres oder lokale JSON-Datei |
-| `lib/auth.ts`, `proxy.ts` | Passwortschutz über ein signiertes Cookie |
+| `app/overlay/` | OBS-Overlay (öffentlich mit Schlüssel) |
+| `lib/auth.ts`, `proxy.ts` | Passwortschutz über ein signiertes Cookie, Overlay-Schlüssel |
+| `scripts/set-secrets.ps1` | Passwort und Secret in Vercel setzen |

@@ -57,3 +57,17 @@ export async function checkPassword(input: string): Promise<boolean> {
 export function isConfigured(): boolean {
   return config() !== null;
 }
+
+/* ---------- OBS-Overlay ---------- */
+
+/** Nur-Lese-Schlüssel pro Challenge, damit OBS das Overlay ohne Login laden kann. */
+export async function overlayKey(challengeId: string): Promise<string | null> {
+  const cfg = config();
+  return cfg ? (await hmac(cfg.secret, `overlay:${challengeId}`)).slice(0, 32) : null;
+}
+
+export async function isValidOverlayKey(challengeId: string, key: string | null): Promise<boolean> {
+  if (!key) return false;
+  const expected = await overlayKey(challengeId);
+  return expected !== null && safeEqual(key, expected);
+}

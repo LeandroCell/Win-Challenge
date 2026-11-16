@@ -245,6 +245,7 @@ function ChallengeCard({
   const [renaming, setRenaming] = useState(false);
   const [adding, setAdding] = useState(false);
   const [editingGame, setEditingGame] = useState<string | null>(null);
+  const [showOverlay, setShowOverlay] = useState(false);
   const running = c.timerStartedAt !== null;
   useTick(running);
 
@@ -275,6 +276,15 @@ function ChallengeCard({
         )}
         {!renaming && (
           <div className="card-menu">
+            <button
+              className="btn btn-ghost btn-sm btn-icon"
+              title="OBS-Overlay"
+              aria-label="OBS-Overlay"
+              aria-pressed={showOverlay}
+              onClick={() => setShowOverlay((s) => !s)}
+            >
+              <StreamIcon />
+            </button>
             <button className="btn btn-ghost btn-sm btn-icon" title="Umbenennen" aria-label="Umbenennen" onClick={() => setRenaming(true)}>
               <PencilIcon />
             </button>
@@ -294,6 +304,8 @@ function ChallengeCard({
           </div>
         )}
       </div>
+
+      {showOverlay && <OverlayPanel id={c.id} onClose={() => setShowOverlay(false)} />}
 
       <div className="timer-block">
         <div>
@@ -760,6 +772,75 @@ function GameEditForm({
   );
 }
 
+/* ---------- OBS-Overlay ---------- */
+
+const OVERLAY_SIZES = { full: "420 × 640", compact: "560 × 110" } as const;
+
+function OverlayPanel({ id, onClose }: { id: string; onClose: () => void }) {
+  const [key, setKey] = useState<string | null>(null);
+  const [error, setError] = useState("");
+  const [view, setView] = useState<"full" | "compact">("full");
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    api<{ key: string }>(`/api/challenges/${id}/overlay`)
+      .then((d) => setKey(d.key))
+      .catch((e) => setError((e as Error).message));
+  }, [id]);
+
+  const accent = typeof document !== "undefined" ? document.documentElement.dataset.accent || "blue" : "blue";
+  const url = key
+    ? `${window.location.origin}/overlay/${id}?key=${key}&accent=${accent}${view === "compact" ? "&view=compact" : ""}`
+    : "";
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      setError("Kopieren nicht möglich, bitte Link manuell markieren.");
+    }
+  }
+
+  return (
+    <div className="overlay-panel">
+      <div className="overlay-panel-head">
+        <strong>OBS-Overlay</strong>
+        <button className="btn btn-ghost btn-sm" onClick={onClose}>
+          Schließen
+        </button>
+      </div>
+      <div className="seg" role="group" aria-label="Overlay-Variante">
+        <button aria-pressed={view === "full"} onClick={() => setView("full")}>
+          Komplett
+        </button>
+        <button aria-pressed={view === "compact"} onClick={() => setView("compact")}>
+          Kompakt
+        </button>
+      </div>
+      {error ? (
+        <p className="error">{error}</p>
+      ) : (
+        <div className="overlay-url">
+          <input className="input" readOnly value={url || "Lade…"} onFocus={(e) => e.target.select()} aria-label="Overlay-Link" />
+          <button className="btn btn-primary" disabled={!url} onClick={copy}>
+            {copied ? "Kopiert ✓" : "Kopieren"}
+          </button>
+          <a className="btn" href={url || undefined} target="_blank" rel="noreferrer" aria-disabled={!url}>
+            Vorschau
+          </a>
+        </div>
+      )}
+      <p className="hint">
+        In OBS: Quelle hinzufügen → <b>Browser</b> → Link einfügen, Größe <b>{OVERLAY_SIZES[view]}</b>. Der Hintergrund
+        ist durchsichtig, die Farbe entspricht deiner aktuellen Akzentfarbe. Wer den Link hat, kann den Stand nur ansehen,
+        nicht ändern, also nicht öffentlich posten.
+      </p>
+    </div>
+  );
+}
+
 /* ---------- Icons ---------- */
 
 const svg = {
@@ -797,5 +878,12 @@ const PlayIcon = () => (
 const PauseIcon = () => (
   <svg {...svg} width={12} height={12}>
     <path d="M7 4v16M17 4v16" strokeWidth={3} />
+  </svg>
+);
+const StreamIcon = () => (
+  <svg {...svg}>
+    <rect x="2" y="4" width="20" height="14" rx="2" />
+    <path d="M8 22h8M12 18v4" />
+    <circle cx="12" cy="11" r="2.5" fill="currentColor" />
   </svg>
 );
