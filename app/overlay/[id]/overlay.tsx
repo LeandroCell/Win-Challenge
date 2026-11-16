@@ -47,11 +47,13 @@ export default function Overlay({
   overlayKey,
   view,
   accent,
+  rows,
 }: {
   id: string;
   overlayKey: string;
   view: "full" | "compact";
   accent: string;
+  rows: number;
 }) {
   const [data, setData] = useState<OverlayData | null>(null);
   const [error, setError] = useState("");
@@ -181,35 +183,99 @@ export default function Overlay({
 
         {finished && <div className="ov-banner">Challenge geschafft!</div>}
 
-        <ol className="ov-games">
-          {data.games.map((g, i) => {
-            const isCurrent = !finished && current?.id === g.id;
-            const flashing = flash[g.id] && Date.now() - flash[g.id] < 1500;
-            return (
-              <li
-                key={g.id}
-                className={`ov-game${g.done ? " is-done" : ""}${isCurrent ? " is-current" : ""}${
-                  flashing ? " is-flash" : ""
-                }`}
-              >
-                <span className="ov-idx">{g.done ? "✓" : i + 1}</span>
-                <span className="ov-name">{g.name}</span>
-                {g.mode === "streak" && g.target <= 10 ? (
-                  <span className="ov-dots">
-                    {Array.from({ length: g.target }, (_, k) => (
-                      <span key={k} className={k < g.progress ? "on" : ""} />
-                    ))}
-                  </span>
-                ) : (
-                  <span className="ov-prog">
-                    {g.progress}/{g.target}
-                  </span>
-                )}
-              </li>
-            );
-          })}
-        </ol>
+        <GameList
+          games={data.games}
+          currentId={finished ? null : current?.id ?? null}
+          flash={flash}
+          rows={rows}
+        />
       </div>
+    </div>
+  );
+}
+
+const STEP_MS = 2500; // alle 2,5 s eine Zeile weiter
+
+/** Zeigt `rows` Spiele; bei mehr Spielen läuft die Liste automatisch in einer Schleife durch. */
+function GameList({
+  games,
+  currentId,
+  flash,
+  rows,
+}: {
+  games: OverlayGame[];
+  currentId: string | null;
+  flash: Record<string, number>;
+  rows: number;
+}) {
+  const scroll = games.length > rows;
+  const [pos, setPos] = useState(0);
+  const [animate, setAnimate] = useState(true);
+
+  useEffect(() => {
+    if (!scroll) {
+      setPos(0);
+      return;
+    }
+    const t = setInterval(() => {
+      setAnimate(true);
+      setPos((p) => p + 1);
+    }, STEP_MS);
+    return () => clearInterval(t);
+  }, [scroll]);
+
+  // Am Ende der Schleife unsichtbar zurück zum Anfang springen (die ersten Zeilen sind unten angehängt)
+  useEffect(() => {
+    if (pos < games.length) return;
+    const t = setTimeout(() => {
+      setAnimate(false);
+      setPos(0);
+    }, 650);
+    return () => clearTimeout(t);
+  }, [pos, games.length]);
+
+  const list = scroll ? [...games, ...games.slice(0, rows)] : games;
+  const offset = scroll ? Math.min(pos, games.length) : 0;
+
+  return (
+    <div
+      className={`ov-games-window${scroll ? " is-scrolling" : ""}`}
+      style={{ "--ov-rows": Math.min(rows, games.length) } as React.CSSProperties}
+    >
+      <ol
+        className="ov-games"
+        style={{
+          transform: `translateY(calc(${-offset} * var(--ov-row)))`,
+          transition: animate ? "transform 0.6s cubic-bezier(0.45, 0, 0.2, 1)" : "none",
+        }}
+      >
+        {list.map((g, k) => {
+          const i = k % games.length;
+          const flashing = flash[g.id] && Date.now() - flash[g.id] < 1500;
+          return (
+            <li
+              key={`${g.id}-${k}`}
+              className={`ov-game${g.done ? " is-done" : ""}${g.id === currentId ? " is-current" : ""}${
+                flashing ? " is-flash" : ""
+              }`}
+            >
+              <span className="ov-idx">{g.done ? "✓" : i + 1}</span>
+              <span className="ov-name">{g.name}</span>
+              {g.mode === "streak" && g.target <= 10 ? (
+                <span className="ov-dots">
+                  {Array.from({ length: g.target }, (_, d) => (
+                    <span key={d} className={d < g.progress ? "on" : ""} />
+                  ))}
+                </span>
+              ) : (
+                <span className="ov-prog">
+                  {g.progress}/{g.target}
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
     </div>
   );
 }

@@ -20,6 +20,7 @@ export default async function OverlayPage({ params, searchParams }: Props) {
       overlayKey={one(sp.key)}
       view={one(sp.view) === "compact" ? "compact" : "full"}
       accent={one(sp.accent) || "blue"}
+      rows={Math.min(20, Math.max(1, Number(one(sp.rows)) || 4))}
     />
   );
 }

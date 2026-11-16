@@ -774,7 +774,7 @@ function GameEditForm({
 
 /* ---------- OBS-Overlay ---------- */
 
-const OVERLAY_SIZES = { full: "390 × 720", compact: "570 × 110" } as const;
+const OVERLAY_SIZES = { full: "390 × 380", compact: "570 × 110" } as const;
 
 function OverlayPanel({ id, onClose }: { id: string; onClose: () => void }) {
   const [key, setKey] = useState<string | null>(null);
