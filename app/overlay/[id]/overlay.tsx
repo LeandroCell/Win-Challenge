@@ -185,7 +185,6 @@ export default function Overlay({
 
         <GameList
           games={data.games}
-          currentId={finished ? null : current?.id ?? null}
           flash={flash}
           rows={rows}
         />
@@ -199,12 +198,10 @@ const SECONDS_PER_ROW = 2.2; // Tempo des Durchlaufs
 /** Zeigt `rows` Spiele; bei mehr Spielen läuft die Liste gleichmäßig in einer Endlosschleife durch. */
 function GameList({
   games,
-  currentId,
   flash,
   rows,
 }: {
   games: OverlayGame[];
-  currentId: string | null;
   flash: Record<string, number>;
   rows: number;
 }) {
@@ -233,7 +230,7 @@ function GameList({
           return (
             <li
               key={`${g.id}-${k}`}
-              className={`ov-game${g.done ? " is-done" : ""}${g.id === currentId ? " is-current" : ""}${
+              className={`ov-game${g.done ? " is-done" : ""}${
                 flashing ? " is-flash" : ""
               }`}
             >

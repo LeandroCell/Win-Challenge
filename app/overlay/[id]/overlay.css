@@ -140,8 +140,6 @@ html:has(.ov-root) body {
 .ov-game.is-done .ov-idx { background: var(--ov-accent); color: #fff; }
 .ov-game.is-done .ov-name { text-decoration: line-through; text-decoration-thickness: 1.5px; }
 
-.ov-game.is-current { background: color-mix(in srgb, var(--ov-accent) 22%, transparent); }
-.ov-game.is-current .ov-idx { background: var(--ov-accent); color: #fff; }
 
 .ov-game.is-flash { animation: ov-flash 1.2s ease-out; }
 
