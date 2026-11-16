@@ -20,11 +20,11 @@ Jede Challenge hat ein Overlay für den Stream. Es zeigt den Gesamt-Timer, den F
 2. Zwischen **Komplett** (420 × 640) und **Kompakt** (560 × 110) wählen und den Link kopieren.
 3. In OBS: **Quelle hinzufügen → Browser**, den Link einfügen und die Größe übernehmen.
 
-Der Hintergrund ist durchsichtig, das Panel halbtransparent. Die Akzentfarbe kommt aus dem Link (). Der Link enthält einen Nur-Lese-Schlüssel und funktioniert ohne Login. Damit kann man den Stand nur ansehen, nicht ändern. Den Link trotzdem nicht öffentlich posten.
+Der Hintergrund ist durchsichtig, das Panel halbtransparent. Die Akzentfarbe kommt aus dem Link (`accent=blue`, `green`, `violet`, `orange`, `pink`, `cyan` oder `graphite`). Der Link enthält einen Nur-Lese-Schlüssel und funktioniert ohne Login. Damit kann man den Stand nur ansehen, nicht ändern. Den Link trotzdem nicht öffentlich posten.
 
 ## Deployment
 
-Das Repo ist mit Vercel verbunden: **Jeder Push auf  wird automatisch veröffentlicht.**
+Das Repo ist mit Vercel verbunden: **Jeder Push auf `main` wird automatisch veröffentlicht.**
 
 ## Auf Vercel neu einrichten
 
