@@ -61,6 +61,7 @@ export default function Overlay({
   const [, tick] = useState(0);
   const offset = useRef(0);
   const prev = useRef<Map<string, number>>(new Map());
+  const version = useRef<string | null>(null);
 
   // OBS: Hintergrund komplett durchsichtig
   useEffect(() => {
@@ -81,6 +82,12 @@ export default function Overlay({
           setError(json.error || `Fehler ${res.status}`);
           return;
         }
+        // Neue Version deployed? Dann komplett neu laden (OBS behält sonst den alten Stand)
+        if (version.current && json.version && json.version !== version.current) {
+          window.location.reload();
+          return;
+        }
+        version.current = json.version ?? null;
         offset.current = json.serverNow - Date.now();
         // Spiele markieren, die gerade einen Sieg bekommen haben
         const changed: Record<string, number> = {};

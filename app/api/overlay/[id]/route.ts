@@ -33,6 +33,8 @@ export async function GET(req: Request, { params }: Ctx) {
           done: g.completedAt !== null,
         })),
         serverNow: Date.now(),
+        // Ändert sich bei jedem Deploy → Overlay lädt sich in OBS selbst neu
+        version: process.env.VERCEL_DEPLOYMENT_ID || process.env.VERCEL_GIT_COMMIT_SHA || "dev",
       },
       { headers: noStore },
     );
