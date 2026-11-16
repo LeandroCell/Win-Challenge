@@ -14,7 +14,7 @@ Technik: Next.js 16, Postgres über [Neon](https://neon.tech) und Deployment auf
 
 ## OBS-Overlay
 
-Jede Challenge hat ein Overlay für den Stream. Es zeigt den Gesamt-Timer, den Fortschritt und alle Spiele. Das aktuelle Spiel wird hervorgehoben, und ein neuer Sieg blinkt kurz auf. Es sind immer 4 Spiele zu sehen; bei mehr Spielen läuft die Liste automatisch in einer Schleife durch (Anzahl änderbar mit `&rows=5` im Link).
+Jede Challenge hat ein Overlay für den Stream. Es zeigt den Gesamt-Timer, den Fortschritt und alle Spiele. Das aktuelle Spiel wird hervorgehoben, und ein neuer Sieg blinkt kurz auf. Es sind immer 4 Spiele zu sehen; bei mehr Spielen läuft die Liste gleichmäßig als Endlos-Laufband durch (Anzahl änderbar mit `&rows=5` im Link).
 
 1. Auf der Challenge-Karte auf das **Bildschirm-Symbol** klicken.
 2. Zwischen **Komplett** (390 × 380) und **Kompakt** (570 × 110) wählen und den Link kopieren.

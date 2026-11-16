@@ -194,9 +194,9 @@ export default function Overlay({
   );
 }
 
-const STEP_MS = 2500; // alle 2,5 s eine Zeile weiter
+const SECONDS_PER_ROW = 2.2; // Tempo des Durchlaufs
 
-/** Zeigt `rows` Spiele; bei mehr Spielen läuft die Liste automatisch in einer Schleife durch. */
+/** Zeigt `rows` Spiele; bei mehr Spielen läuft die Liste gleichmäßig in einer Endlosschleife durch. */
 function GameList({
   games,
   currentId,
@@ -209,33 +209,7 @@ function GameList({
   rows: number;
 }) {
   const scroll = games.length > rows;
-  const [pos, setPos] = useState(0);
-  const [animate, setAnimate] = useState(true);
-
-  useEffect(() => {
-    if (!scroll) {
-      setPos(0);
-      return;
-    }
-    const t = setInterval(() => {
-      setAnimate(true);
-      setPos((p) => p + 1);
-    }, STEP_MS);
-    return () => clearInterval(t);
-  }, [scroll]);
-
-  // Am Ende der Schleife unsichtbar zurück zum Anfang springen (die ersten Zeilen sind unten angehängt)
-  useEffect(() => {
-    if (pos < games.length) return;
-    const t = setTimeout(() => {
-      setAnimate(false);
-      setPos(0);
-    }, 650);
-    return () => clearTimeout(t);
-  }, [pos, games.length]);
-
   const list = scroll ? [...games, ...games.slice(0, rows)] : games;
-  const offset = scroll ? Math.min(pos, games.length) : 0;
 
   return (
     <div
@@ -244,10 +218,14 @@ function GameList({
     >
       <ol
         className="ov-games"
-        style={{
-          transform: `translateY(calc(${-offset} * var(--ov-row)))`,
-          transition: animate ? "transform 0.6s cubic-bezier(0.45, 0, 0.2, 1)" : "none",
-        }}
+        style={
+          scroll
+            ? ({
+                "--ov-count": games.length,
+                animationDuration: `${games.length * SECONDS_PER_ROW}s`,
+              } as React.CSSProperties)
+            : undefined
+        }
       >
         {list.map((g, k) => {
           const i = k % games.length;
